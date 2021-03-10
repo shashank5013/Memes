@@ -7,6 +7,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         mImageView=findViewById(R.id.meme);
         getSupportLoaderManager().initLoader(LOADER_ID,null,this);
+    }
+
+    /**
+     * Onclick method for  next button
+     * @param view
+     */
+    public void next(View view){
+        getSupportLoaderManager().restartLoader(LOADER_ID,null,this);
     }
 
     /**
