@@ -6,7 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     //Loader ID
     private final int LOADER_ID=1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +44,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     public void next(View view){
         getSupportLoaderManager().restartLoader(LOADER_ID,null,this);
+    }
+
+    /**
+     * Onclick method for share button
+     * @param view
+     */
+    public void share(View view){
+        Drawable mDrawable = mImageView.getDrawable();
+        Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
+        Uri uri = Uri.parse(path);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share Image"));
     }
 
     /**
