@@ -15,8 +15,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
@@ -29,12 +31,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     //Loader ID
     private final int LOADER_ID=1;
 
+    //Progress Bar
+    private ProgressBar mProgressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mImageView=findViewById(R.id.meme);
+        mProgressBar=findViewById(R.id.progress_circular);
+
+        mImageView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         getSupportLoaderManager().initLoader(LOADER_ID,null,this);
     }
 
@@ -43,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * @param view
      */
     public void next(View view){
+
+        mImageView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         getSupportLoaderManager().restartLoader(LOADER_ID,null,this);
     }
 
@@ -75,7 +87,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        Glide.with(this).load(data).into(mImageView);
+        Picasso.get().load(data)
+                .into(mImageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mImageView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+
+                });
+        mProgressBar.setVisibility(View.GONE);
+        mImageView.setVisibility(View.VISIBLE);
     }
 
     @Override
