@@ -8,12 +8,17 @@ import androidx.loader.content.Loader;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -37,8 +42,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        android.graphics.drawable.Drawable background = MainActivity.this.getResources().getDrawable(R.drawable.gradient2);
+        getWindow().setBackgroundDrawable(background);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
         mImageView=findViewById(R.id.meme);
         mProgressBar=findViewById(R.id.progress_circular);
 
@@ -46,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mProgressBar.setVisibility(View.VISIBLE);
         getSupportLoaderManager().initLoader(LOADER_ID,null,this);
     }
-
     /**
      * Onclick method for  next button
      * @param view
@@ -63,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * @param view
      */
     public void share(View view){
+
         Drawable mDrawable = mImageView.getDrawable();
         Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
@@ -74,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, "Share Image"));
     }
-
     /**
      *Loader calls for  Background network calls
      */
