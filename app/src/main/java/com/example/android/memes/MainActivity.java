@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     public void share(View view){
 
+        if(mImageView.getDrawable()==null){
+            return;
+        }
         Drawable mDrawable = mImageView.getDrawable();
         Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
